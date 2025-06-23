@@ -1,0 +1,19 @@
+parametersSchema:
+    glpi: structure([
+        glpiVersion: schema(string(), nullable())
+    ])
+
+parameters:
+    glpi:
+        glpiVersion: null
+
+services:
+    -
+        class: PHPStanGlpi\Services\GlpiVersionResolver
+        arguments:
+            version: %glpi.glpiVersion%
+
+rules:
+    - PHPStanGlpi\Rules\ForbidExitRule
+    - PHPStanGlpi\Rules\ForbidHttpResponseCodeRule
+    - PHPStanGlpi\Rules\MissingGlobalVarTypeRule

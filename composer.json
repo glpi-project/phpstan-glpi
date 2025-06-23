@@ -1,0 +1,47 @@
+{
+    "name": "glpi-project/phpstan-glpi",
+    "type": "phpstan-extension",
+    "description": "PHPStan rules for GLPI.",
+    "license": [
+        "MIT"
+    ],
+    "require": {
+        "php": ">=7.4",
+        "phpstan/phpstan": "^2.1"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.75",
+        "php-parallel-lint/php-parallel-lint": "^1.4",
+        "phpstan/phpstan-phpunit": "^2.0",
+        "phpunit/phpunit": "^9.6"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "platform": {
+            "php": "7.4.99"
+        },
+        "sort-packages": true
+    },
+    "extra": {
+        "phpstan": {
+            "includes": [
+                "rules.neon"
+            ]
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "PHPStanGlpi\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "classmap": [
+            "tests/"
+        ],
+        "psr-4": {
+            "PHPStanGlpi\\Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
