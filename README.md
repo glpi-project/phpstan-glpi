@@ -15,6 +15,41 @@ parameters:
 
 ## Rules
 
+### `ForbidDynamicInstantiationRule`
+
+> Since GLPI 11.0.
+
+Instantiating an object from an unrestricted dynamic string is unsecure.
+Indeed, it can lead to unexpected code execution and has already been a source of security issues in GLPI.
+
+Before instantiating an object, a check must be done to validate that the variable contains an expected class string.
+```php
+$class = $_GET['itemtype'];
+
+$object = new $class(); // unsafe
+
+if (is_a($class, CommonDBTM::class, true)) {
+    $object = new $class(); // safe
+}
+```
+
+If the `treatPhpDocTypesAsCertain` PHPStan parameter is not set to `false`, a variable with a specific `class-string`
+type will be considered safe.
+```php
+class MyClass
+{
+    /**
+     * @var class-string<\CommonDBTM> $class
+     */
+    public function doSomething(string $class): void
+    {
+        $object = new $class(); // safe
+
+        // ...
+    }
+}
+```
+
 ### `ForbidExitRule`
 
 > Since GLPI 11.0.
