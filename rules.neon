@@ -12,8 +12,15 @@ services:
         class: PHPStanGlpi\Services\GlpiVersionResolver
         arguments:
             version: %glpi.glpiVersion%
+    -
+        class: PHPStanGlpi\Rules\ForbidDynamicInstantiationRule
+        arguments:
+            treatPhpDocTypesAsCertain: %treatPhpDocTypesAsCertain%
+        tags:
+            - phpstan.rules.rule
 
 rules:
+    # declared in `services` - PHPStanGlpi\Rules\ForbidDynamicInstantiationRule
     - PHPStanGlpi\Rules\ForbidExitRule
     - PHPStanGlpi\Rules\ForbidHttpResponseCodeRule
     - PHPStanGlpi\Rules\MissingGlobalVarTypeRule

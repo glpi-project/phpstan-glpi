@@ -59,7 +59,7 @@ jobs:
       - name: "PHP Parallel Lint"
         if: ${{ !cancelled() }}
         run: |
-          vendor/bin/parallel-lint --exclude ./.git/ --exclude ./vendor/ --checkstyle . | cs2pr
+          vendor/bin/parallel-lint --exclude ./.git/ --exclude ./tests/data/ --exclude ./vendor/ --checkstyle . | cs2pr
       - name: "PHP CS Fixer"
         if: ${{ !cancelled() }}
         run: |
