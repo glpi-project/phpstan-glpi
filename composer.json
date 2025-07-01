@@ -10,7 +10,7 @@
         "phpstan/phpstan": "^2.1"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.75",
+        "friendsofphp/php-cs-fixer": "^3.76",
         "php-parallel-lint/php-parallel-lint": "^1.4",
         "phpstan/phpstan-phpunit": "^2.0",
         "phpunit/phpunit": "^9.6"
