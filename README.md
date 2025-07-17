@@ -6,6 +6,16 @@ This repository provides a PHPStan extension that can be used in both GLPI and G
 
 To install this PHPStan extension, run the `composer require --dev glpi-project/phpstan-glpi`.
 
+To make this extension automatically enabled by PHPStan, you can also install the `phpstan/extension-installer` library,
+otherwise you will need to add it in you PHPStan configuration file in the `includes` section:
+```neon
+includes:
+	- vendor/glpi-project/phpstan-glpi/rules.neon
+```
+See https://phpstan.org/user-guide/extension-library#installing-extensions for more information.
+
+## Configuration
+
 The GLPI version should be detected automatically, but you can specify it in your PHPStan configuration:
 ```yaml
 parameters:
