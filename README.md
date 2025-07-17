@@ -16,12 +16,43 @@ See https://phpstan.org/user-guide/extension-library#installing-extensions for m
 
 ## Configuration
 
-The GLPI version should be detected automatically, but you can specify it in your PHPStan configuration:
-```yaml
+The PHPStan configuration depends on your GLPI version.
+If your plugin is located in either the `plugins` or `marketplace` directory of GLPI,
+you can use the following configuration file example:
+
+```neon
+parameters:
+    level: 0
+    paths:
+        - ajax
+        - front
+        - inc # or `src` if your PHP class files are in the `src` directory
+        - hook.php
+        - setup.php
+    scanDirectories:
+        - ../../inc
+        - ../../src
+
+    # for GLPI 11.x the following configuration entries must be used
+    bootstrapFiles:
+        - ../../stubs/glpi_constants.php
+        - ../../vendor/autoload.php
+
+    # for GLPI 10.x the following configuration entries must be used
+    bootstrapFiles:
+        - ../../inc/based_config.php
+    stubFiles:
+        - ../../stubs/glpi_constants.php
+```
+
+The GLPI version should be detected automatically, but you can specify it in the `parameters` section of your PHPStan configuration:
+```neon
 parameters:
     glpi:
         glpiVersion: "11.0"
 ```
+
+See https://phpstan.org/config-reference fore more information about the PHPStan configuration options.
 
 ## Rules
 
