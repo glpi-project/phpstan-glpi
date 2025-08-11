@@ -6,18 +6,20 @@ namespace PHPStanGlpi\Tests\Rules;
 
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
-use PHPStanGlpi\Services\GlpiVersionResolver;
 use PHPStanGlpi\Rules\ForbidDynamicInstantiationRule;
+use PHPStanGlpi\Tests\TestTrait;
 
 /**
  * @extends RuleTestCase<ForbidDynamicInstantiationRule>
  */
 class ForbidDynamicInstantiationRulePhpDocAsCertainTest extends RuleTestCase
 {
+    use TestTrait;
+
     protected function getRule(): Rule
     {
         return new ForbidDynamicInstantiationRule(
-            new GlpiVersionResolver('11.0.0'),
+            $this->getGlpiVersionResolver('11.0.0'),
             true
         );
     }

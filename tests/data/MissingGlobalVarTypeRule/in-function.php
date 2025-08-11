@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 function test()
 {
-    global $DB;
+    global $DB; // this one should not be detected as it is automatically resolved
+
+    global $CFGGLPI; // typo
 
     /**
      * @var ?string $another

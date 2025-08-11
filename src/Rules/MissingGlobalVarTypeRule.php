@@ -13,7 +13,9 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\FileTypeMapper;
+use PHPStan\Type\Type;
 use PHPStanGlpi\Services\GlpiVersionResolver;
+use PHPStanGlpi\Analyser\GlobalTypeResolver;
 
 /**
  * @implements Rule<Stmt>
@@ -22,13 +24,17 @@ class MissingGlobalVarTypeRule implements Rule
 {
     private FileTypeMapper $fileTypeMapper;
 
+    private GlobalTypeResolver $globalTypeResolver;
+
     private GlpiVersionResolver $glpiVersionResolver;
 
     public function __construct(
         FileTypeMapper $fileTypeMapper,
+        GlobalTypeResolver $globalTypeResolver,
         GlpiVersionResolver $glpiVersionResolver
     ) {
         $this->fileTypeMapper = $fileTypeMapper;
+        $this->globalTypeResolver = $globalTypeResolver;
         $this->glpiVersionResolver = $glpiVersionResolver;
     }
 
@@ -50,10 +56,13 @@ class MissingGlobalVarTypeRule implements Rule
 
         $variablesTypes = [];
         foreach ($node->vars as $var) {
-            if (!$var instanceof Variable) {
+            if (!$var instanceof Variable || !is_string($var->name)) {
+                // Unexpected case that should not happen
                 continue;
             }
-            if (!is_string($var->name)) {
+
+            if ($this->globalTypeResolver->getType($var, $scope) instanceof Type) {
+                // The global variable type can be resolved automatically, no need to force its definition
                 continue;
             }
 

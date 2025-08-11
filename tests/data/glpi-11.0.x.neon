@@ -1,0 +1,3 @@
+parameters:
+    glpi:
+        glpiVersion: "11.0.0"

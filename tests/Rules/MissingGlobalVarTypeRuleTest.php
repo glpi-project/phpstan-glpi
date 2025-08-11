@@ -8,18 +8,21 @@ use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
 use PHPStanGlpi\Rules\MissingGlobalVarTypeRule;
-use PHPStanGlpi\Services\GlpiVersionResolver;
+use PHPStanGlpi\Tests\TestTrait;
 
 /**
  * @extends RuleTestCase<MissingGlobalVarTypeRule>
  */
-class MissingGlobalVarTypeTest extends RuleTestCase
+class MissingGlobalVarTypeRuleTest extends RuleTestCase
 {
+    use TestTrait;
+
     protected function getRule(): Rule
     {
         return new MissingGlobalVarTypeRule(
             self::getContainer()->getByType(FileTypeMapper::class),
-            new GlpiVersionResolver('10.0.0')
+            $this->getGlobalTypeResolver('11.0.0', __DIR__ . '/../data'),
+            $this->getGlpiVersionResolver('11.0.0')
         );
     }
 
@@ -27,12 +30,8 @@ class MissingGlobalVarTypeTest extends RuleTestCase
     {
         $this->analyse([__DIR__ . '/../data/MissingGlobalVarTypeRule/in-class-method.php'], [
             [
-                'Missing PHPDoc tag @var for global variable $CFG_GLPI',
-                9,
-            ],
-            [
-                'Missing PHPDoc tag @var for global variable $GLPI_CACHE',
-                9,
+                'Missing PHPDoc tag @var for global variable $undocumented',
+                16,
             ],
         ]);
     }
@@ -41,8 +40,8 @@ class MissingGlobalVarTypeTest extends RuleTestCase
     {
         $this->analyse([__DIR__ . '/../data/MissingGlobalVarTypeRule/in-function.php'], [
             [
-                'Missing PHPDoc tag @var for global variable $DB',
-                7,
+                'Missing PHPDoc tag @var for global variable $CFGGLPI',
+                9,
             ],
         ]);
     }
