@@ -7,17 +7,19 @@ namespace PHPStanGlpi\Tests\Rules;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStanGlpi\Rules\ForbidHttpResponseCodeRule;
-use PHPStanGlpi\Services\GlpiVersionResolver;
+use PHPStanGlpi\Tests\TestTrait;
 
 /**
  * @extends RuleTestCase<ForbidHttpResponseCodeRule>
  */
 class ForbidHttpResponseCodeRuleTest extends RuleTestCase
 {
+    use TestTrait;
+
     protected function getRule(): Rule
     {
         return new ForbidHttpResponseCodeRule(
-            new GlpiVersionResolver('11.0.0')
+            $this->getGlpiVersionResolver('11.0.0')
         );
     }
 

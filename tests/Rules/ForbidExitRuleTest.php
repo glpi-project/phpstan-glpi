@@ -7,17 +7,19 @@ namespace PHPStanGlpi\Tests\Rules;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStanGlpi\Rules\ForbidExitRule;
-use PHPStanGlpi\Services\GlpiVersionResolver;
+use PHPStanGlpi\Tests\TestTrait;
 
 /**
  * @extends RuleTestCase<ForbidExitRule>
  */
 class ForbidExitRuleTest extends RuleTestCase
 {
+    use TestTrait;
+
     protected function getRule(): Rule
     {
         return new ForbidExitRule(
-            new GlpiVersionResolver('11.0.0')
+            $this->getGlpiVersionResolver('11.0.0')
         );
     }
 

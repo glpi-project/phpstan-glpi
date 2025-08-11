@@ -7,7 +7,8 @@
     ],
     "require": {
         "php": ">=7.4",
-        "phpstan/phpstan": "^2.1"
+        "phpstan/phpstan": "^2.1",
+        "symfony/polyfill-php80": "^1.32"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.76",

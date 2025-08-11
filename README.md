@@ -45,14 +45,21 @@ parameters:
         - ../../stubs/glpi_constants.php
 ```
 
-The GLPI version should be detected automatically, but you can specify it in the `parameters` section of your PHPStan configuration:
+The GLPI path and version should be detected automatically, but you can specify them in the `parameters` section of your PHPStan configuration:
 ```neon
 parameters:
     glpi:
-        glpiVersion: "11.0"
+        glpiPath: "/path/to/glpi"
+        glpiVersion: "11.0.0"
 ```
 
 See https://phpstan.org/config-reference fore more information about the PHPStan configuration options.
+
+## Analyser improvements
+
+This extension will help PHPStan to resolve the GLPI global variables types.
+For instance, it will indicate that the `global $DB;` variable is an instance of the `DBmysql` class,
+so PHPStan will be able to detected bad method calls, deprecated methods usages, ...
 
 ## Rules
 
@@ -111,9 +118,10 @@ Therefore, its usage is discouraged.
 > Since GLPI 10.0.
 
 By default, PHPStan is not able to detect the global variables types, and is therefore not able to detect any issue
-related to their usage. To get around this limitation, we recommend that you declare each global variable type with
-a PHPDoc tag.
+related to their usage. This extension will resolve the type of GLPI global variables, but cannot resolve your plugin
+specific global variables.
+To get around this limitation, we recommend that you declare each global variable type with a PHPDoc tag.
 ```php
-/** @var \DBmysql $DB */
-global $DB;
+/** @var \Migration $migration */
+global migration;
 ```

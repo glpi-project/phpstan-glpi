@@ -1,13 +1,23 @@
 parametersSchema:
     glpi: structure([
+        glpiPath: schema(string(), nullable()),
         glpiVersion: schema(string(), nullable())
     ])
 
 parameters:
     glpi:
+        glpiPath: null
         glpiVersion: null
 
 services:
+    -
+        class: PHPStanGlpi\Analyser\GlobalTypeResolver
+        tags:
+            - phpstan.broker.expressionTypeResolverExtension
+    -
+        class: PHPStanGlpi\Services\GlpiPathResolver
+        arguments:
+            path: %glpi.glpiPath%
     -
         class: PHPStanGlpi\Services\GlpiVersionResolver
         arguments:

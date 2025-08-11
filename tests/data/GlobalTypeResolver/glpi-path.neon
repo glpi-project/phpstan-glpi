@@ -1,0 +1,3 @@
+parameters:
+    glpi:
+        glpiPath: %rootDir%/../../../tests/data/GlobalTypeResolver

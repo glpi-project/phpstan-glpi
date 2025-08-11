@@ -9,10 +9,13 @@ use SplFileInfo;
 
 class GlpiVersionResolver
 {
+    private GlpiPathResolver $glpiPathResolver;
+
     private ?string $version;
 
-    public function __construct(?string $version)
+    public function __construct(GlpiPathResolver $glpiPathResolver, ?string $version)
     {
+        $this->glpiPathResolver = $glpiPathResolver;
         $this->version = $version;
     }
 
@@ -27,28 +30,16 @@ class GlpiVersionResolver
             return $this->version;
         }
 
-        $expected_directories = [
-            // Expected directory when `phpstan-glpi` in required by GLPI itself:
-            // `glpi/` <- `vendor/` <- `glpi-project/` <- `phpstan-glpi/` <- `src/` <- `Services/`
-            \dirname(__DIR__, 5),
+        $versionDir = \implode(DIRECTORY_SEPARATOR, [$this->glpiPathResolver->getGlpiPath(), 'version']);
 
-            // Expected directory when `phpstan-glpi` in required a GLPI plugin:
-            // `glpi/` <- `plugins/` <- `{$plugin_key}/` <- `vendor/` <- `glpi-project/` <- `phpstan-glpi/` <- `src/` <- `Services/`
-            \dirname(__DIR__, 7),
-        ];
+        if (\is_dir($versionDir)) {
+            $fileIterator = new FilesystemIterator($versionDir);
+            $files = \iterator_to_array($fileIterator);
+            $versionFile = \end($files);
 
-        foreach ($expected_directories as $directory) {
-            $version_dir = $directory . DIRECTORY_SEPARATOR . 'version';
-
-            if (\is_dir($version_dir)) {
-                $file_iterator = new FilesystemIterator($version_dir);
-                $files = \iterator_to_array($file_iterator);
-                $version_file = \end($files);
-
-                if ($version_file instanceof SplFileInfo) {
-                    $this->version = $version_file->getBaseName();
-                    return $this->version;
-                }
+            if ($versionFile instanceof SplFileInfo) {
+                $this->version = $versionFile->getBaseName();
+                return $this->version;
             }
         }
 
