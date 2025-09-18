@@ -34,3 +34,4 @@ rules:
     - PHPStanGlpi\Rules\ForbidExitRule
     - PHPStanGlpi\Rules\ForbidHttpResponseCodeRule
     - PHPStanGlpi\Rules\MissingGlobalVarTypeRule
+    - PHPStanGlpi\Rules\ForbidEmptyExceptionMessageRule
