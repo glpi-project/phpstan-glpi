@@ -11,7 +11,7 @@
         "symfony/polyfill-php80": "^1.33"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.85",
+        "friendsofphp/php-cs-fixer": "^3.88",
         "php-parallel-lint/php-parallel-lint": "^1.4",
         "phpstan/phpstan-phpunit": "^2.0",
         "phpunit/phpunit": "^9.6"
