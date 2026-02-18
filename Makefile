@@ -29,8 +29,8 @@ parallel-lint: ## Run PHP lint
 	@$(PHP) php vendor/bin/parallel-lint \
 		--show-deprecated \
 		--colors \
-		--exclude ./vendor/ \
 		--exclude ./tests/data/ \
+		--exclude ./vendor/ \
 		.
 .PHONY: parallel-lint
 
