@@ -61,6 +61,7 @@ class ForbidDangerousSystemFunctionRule implements Rule
 		// We allow some functions
 		$allowed_functions = [
 			'posix_geteuid',
+
 			'pcntl_async_signals',
 			'pcntl_signal',
 			'pcntl_signal_get_handler',
@@ -70,24 +71,38 @@ class ForbidDangerousSystemFunctionRule implements Rule
 
 		// Banning other functions
 		$functions = array_merge($functions, [
-			'proc_open',
+			'disk_free_space',
+			'diskfreespace',
+			'dl',
+			'escapeshellcmd',
+			'exec',
+			'getmyuid',
+			'highlight_file',
+			'link',
+			'passthru',
+			'popen',
+
 			'proc_close',
 			'proc_nice',
+			'proc_open',
 			'proc_terminate',
-			'dl',
-			'link',
-			'highlight_file',
-			'show_source',
-			'diskfreespace',
-			'disk_free_space',
-			'getmyuid',
-			'popen',
-			'escapeshellcmd',
-			'symlink',
+
 			'shell_exec',
-			'exec',
+			'show_source',
+
+			// We don't use stub since we only block a few functions
+			'socket_accept',
+			'socket_bind',
+			'socket_clear_error',
+			'socket_close',
+			'socket_connect',
+			'socket_create_listen',
+			'socket_create_pair',
+			'socket_listen',
+			'socket_read',
+
+			'symlink',
 			'system',
-			'passthru',
 		]);
 
 		return $functions;
