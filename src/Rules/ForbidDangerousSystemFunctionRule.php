@@ -19,10 +19,13 @@ use PHPStanGlpi\Services\GlpiVersionResolver;
 class ForbidDangerousSystemFunctionRule implements Rule
 {
     private GlpiVersionResolver $glpiVersionResolver;
+    /** @var string[] */
+    private array $forbidden_functions;
 
     public function __construct(GlpiVersionResolver $glpiVersionResolver)
     {
         $this->glpiVersionResolver = $glpiVersionResolver;
+        $this->forbidden_functions = $this->getForbiddenFunctions();
     }
 
     public function getNodeType(): string
@@ -37,19 +40,20 @@ class ForbidDangerousSystemFunctionRule implements Rule
             return [];
         }
 
-        $errors = [];
-        foreach ($this->getForbiddenFunctions() as $forbiddenFunction) {
-            if (
-                $node->name instanceof Name
-                && $node->name->toString() === $forbiddenFunction
-            ) {
-                $errors[] = RuleErrorBuilder::message(
-                    "For security reason, GLPI recommends to disable the `{$forbiddenFunction}`  function. Therefore, its usage may be blocked in most GLPI instances and you should not use it.",
-                )->identifier('glpi.forbidDangerousSystemFunction')->build();
-            }
+        if (!$node->name instanceof Name) {
+            return [];
         }
 
-        return $errors;
+        $function_name = $node->name->toString();
+        if (in_array($function_name, $this->forbidden_functions, true)) {
+            return [
+                RuleErrorBuilder::message(
+                    "For security reason, GLPI recommends to disable the `{$function_name}`  function. Therefore, its usage may be blocked in most GLPI instances and you should not use it.",
+                )->identifier('glpi.forbidDangerousSystemFunction')->build(),
+            ];
+        }
+
+        return [];
     }
 
     /**
@@ -64,7 +68,7 @@ class ForbidDangerousSystemFunctionRule implements Rule
         /** @var array<string> $functions */
         $functions = preg_grep('/^(posix_|pcntl_)/', $stubs_functions);
         if (!$functions) {
-            $functions = [];
+            throw new \RuntimeException('Regex exception');
         }
 
         // We allow some functions
