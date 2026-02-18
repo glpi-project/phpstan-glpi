@@ -2,6 +2,7 @@
 
 $finder = (new PhpCsFixer\Finder())
     ->in(__DIR__)
+	->exclude('tests/data')
 ;
 
 return (new PhpCsFixer\Config())
