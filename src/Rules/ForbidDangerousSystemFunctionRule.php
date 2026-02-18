@@ -52,59 +52,68 @@ class ForbidDangerousSystemFunctionRule implements Rule
         return $errors;
     }
 
-	private function getForbiddenFunctions(): array
-	{
-		$stubs_map = new Php8StubsMap(PHP_VERSION_ID);
-		$stubs_functions = array_keys($stubs_map->functions);
+    /**
+     * @return array<string>
+     */
+    private function getForbiddenFunctions(): array
+    {
+        // @phpstan-ignore-next-line
+        $stubs_map = new Php8StubsMap(PHP_VERSION_ID);
+        $stubs_functions = array_keys($stubs_map->functions);
 
-		$functions = preg_grep('/^(posix_|pcntl_)/', $stubs_functions);
-		// We allow some functions
-		$allowed_functions = [
-			'posix_geteuid',
+        /** @var array<string> $functions */
+        $functions = preg_grep('/^(posix_|pcntl_)/', $stubs_functions);
+        if (!$functions) {
+            $functions = [];
+        }
 
-			'pcntl_async_signals',
-			'pcntl_signal',
-			'pcntl_signal_get_handler',
-			'pcntl_signal_dispatch',
-		];
-		$functions = array_diff($functions, $allowed_functions);
+        // We allow some functions
+        $allowed_functions = [
+            'posix_geteuid',
 
-		// Banning other functions
-		$functions = array_merge($functions, [
-			'disk_free_space',
-			'diskfreespace',
-			'dl',
-			'escapeshellcmd',
-			'exec',
-			'getmyuid',
-			'highlight_file',
-			'link',
-			'passthru',
-			'popen',
+            'pcntl_async_signals',
+            'pcntl_signal',
+            'pcntl_signal_get_handler',
+            'pcntl_signal_dispatch',
+        ];
+        $functions = array_diff($functions, $allowed_functions);
 
-			'proc_close',
-			'proc_nice',
-			'proc_open',
-			'proc_terminate',
+        // Banning other functions
+        $functions = array_merge($functions, [
+            'disk_free_space',
+            'diskfreespace',
+            'dl',
+            'escapeshellcmd',
+            'exec',
+            'getmyuid',
+            'highlight_file',
+            'link',
+            'passthru',
+            'popen',
 
-			'shell_exec',
-			'show_source',
+            'proc_close',
+            'proc_nice',
+            'proc_open',
+            'proc_terminate',
 
-			// We don't use stub since we only block a few functions
-			'socket_accept',
-			'socket_bind',
-			'socket_clear_error',
-			'socket_close',
-			'socket_connect',
-			'socket_create_listen',
-			'socket_create_pair',
-			'socket_listen',
-			'socket_read',
+            'shell_exec',
+            'show_source',
 
-			'symlink',
-			'system',
-		]);
+            // We don't use stub since we only block a few functions
+            'socket_accept',
+            'socket_bind',
+            'socket_clear_error',
+            'socket_close',
+            'socket_connect',
+            'socket_create_listen',
+            'socket_create_pair',
+            'socket_listen',
+            'socket_read',
 
-		return $functions;
-	}
+            'symlink',
+            'system',
+        ]);
+
+        return $functions;
+    }
 }
