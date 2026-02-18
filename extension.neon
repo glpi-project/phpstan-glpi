@@ -31,7 +31,7 @@ services:
 
 rules:
     # declared in `services` - PHPStanGlpi\Rules\ForbidDynamicInstantiationRule
+    - PHPStanGlpi\Rules\ForbidDangerousSystemFunctionRule
     - PHPStanGlpi\Rules\ForbidExitRule
     - PHPStanGlpi\Rules\ForbidHttpResponseCodeRule
     - PHPStanGlpi\Rules\MissingGlobalVarTypeRule
-    - PHPStanGlpi\Rules\ForbidDangerousSystemFunctionRule

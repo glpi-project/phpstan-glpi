@@ -37,17 +37,17 @@ class ForbidDangerousSystemFunctionRule implements Rule
             return [];
         }
 
-		$errors = [];
-		foreach ($this->getForbiddenFunctions() as $forbiddenFunction) {
-			if (
-				$node->name instanceof Name
-				&& $node->name->toString() === $forbiddenFunction
-			) {
-				$errors[] = RuleErrorBuilder::message(
-					"You should not use the `$forbiddenFunction` function to avoid any dangerous system function call.",
-				)->identifier('glpi.forbidDangerousSystemFunction')->build();
-			}
-		}
+        $errors = [];
+        foreach ($this->getForbiddenFunctions() as $forbiddenFunction) {
+            if (
+                $node->name instanceof Name
+                && $node->name->toString() === $forbiddenFunction
+            ) {
+                $errors[] = RuleErrorBuilder::message(
+                    "For security reason, GLPI recommends to disable the `{$forbiddenFunction}`  function. Therefore, its usage may be blocked in most GLPI instances and you should not use it.",
+                )->identifier('glpi.forbidDangerousSystemFunction')->build();
+            }
+        }
 
         return $errors;
     }

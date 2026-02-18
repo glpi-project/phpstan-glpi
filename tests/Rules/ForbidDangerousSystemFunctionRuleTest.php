@@ -27,47 +27,47 @@ class ForbidDangerousSystemFunctionRuleTest extends RuleTestCase
     {
         $this->analyse([__DIR__ . '/../data/ForbidDangerousSystemFunctionRule/test.php'], [
             [
-                'You should not use the `exec` function to avoid any dangerous system function call.',
+                'For security reason, GLPI recommends to disable the `exec`  function. Therefore, its usage may be blocked in most GLPI instances and you should not use it.',
                 6,
             ],
             [
-                'You should not use the `shell_exec` function to avoid any dangerous system function call.',
+                'For security reason, GLPI recommends to disable the `shell_exec`  function. Therefore, its usage may be blocked in most GLPI instances and you should not use it.',
                 7,
             ],
             [
-                'You should not use the `system` function to avoid any dangerous system function call.',
+                'For security reason, GLPI recommends to disable the `system`  function. Therefore, its usage may be blocked in most GLPI instances and you should not use it.',
                 8,
             ],
             [
-                'You should not use the `passthru` function to avoid any dangerous system function call.',
+                'For security reason, GLPI recommends to disable the `passthru`  function. Therefore, its usage may be blocked in most GLPI instances and you should not use it.',
                 9,
             ],
             [
-                'You should not use the `popen` function to avoid any dangerous system function call.',
+                'For security reason, GLPI recommends to disable the `popen`  function. Therefore, its usage may be blocked in most GLPI instances and you should not use it.',
                 10,
             ],
             [
-                'You should not use the `proc_open` function to avoid any dangerous system function call.',
+                'For security reason, GLPI recommends to disable the `proc_open`  function. Therefore, its usage may be blocked in most GLPI instances and you should not use it.',
                 11,
             ],
             [
-                'You should not use the `pcntl_fork` function to avoid any dangerous system function call.',
+                'For security reason, GLPI recommends to disable the `pcntl_fork`  function. Therefore, its usage may be blocked in most GLPI instances and you should not use it.',
                 12,
             ],
             [
-                'You should not use the `posix_kill` function to avoid any dangerous system function call.',
+                'For security reason, GLPI recommends to disable the `posix_kill`  function. Therefore, its usage may be blocked in most GLPI instances and you should not use it.',
                 13,
             ],
             [
-                'You should not use the `dl` function to avoid any dangerous system function call.',
+                'For security reason, GLPI recommends to disable the `dl`  function. Therefore, its usage may be blocked in most GLPI instances and you should not use it.',
                 14,
             ],
             [
-                'You should not use the `link` function to avoid any dangerous system function call.',
+                'For security reason, GLPI recommends to disable the `link`  function. Therefore, its usage may be blocked in most GLPI instances and you should not use it.',
                 15,
             ],
             [
-                'You should not use the `symlink` function to avoid any dangerous system function call.',
+                'For security reason, GLPI recommends to disable the `symlink`  function. Therefore, its usage may be blocked in most GLPI instances and you should not use it.',
                 16,
             ],
         ]);
