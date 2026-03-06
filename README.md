@@ -76,7 +76,7 @@ $class = $_GET['itemtype'];
 
 $object = new $class(); // unsafe
 
-if (is_a($class, CommonDBTM::class, true)) {
+if (!$class instanceof CommonITILObject) {
     $object = new $class(); // safe
 }
 ```
