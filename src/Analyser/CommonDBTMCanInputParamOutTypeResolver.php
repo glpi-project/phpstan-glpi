@@ -17,7 +17,7 @@ class CommonDBTMCanInputParamOutTypeResolver implements MethodParameterOutTypeEx
         MethodReflection $methodReflection,
         ParameterReflection $parameter
     ): bool {
-        return $methodReflection->getDeclaringClass()->getName() === \CommonDBTM::class // @phpstan-ignore class.notFound
+        return $methodReflection->getDeclaringClass()->getName() === \CommonDBTM::class
             && \in_array($methodReflection->getName(), ['can', 'check'], true)
             && $parameter->getName() === 'input';
     }
@@ -38,7 +38,7 @@ class CommonDBTMCanInputParamOutTypeResolver implements MethodParameterOutTypeEx
         // Returning its know type prevents PHPStan to consider it can be changed from `array` to `null`
         // inside the method.
         //
-        // The `CommonDBTM::check()` is a proxy to `CommonDBTM::can()` and therefore should act the same way.
+        // `CommonDBTM::check()` is a proxy to `CommonDBTM::can()` and therefore should behave the same way.
         return $scope->getType($inputArg->value);
     }
 }
