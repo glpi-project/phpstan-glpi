@@ -11,6 +11,10 @@ parameters:
 
 services:
     -
+        class: PHPStanGlpi\Analyser\CommonDBTMCanInputParamOutTypeResolver
+        tags:
+            - phpstan.methodParameterOutTypeExtension
+    -
         class: PHPStanGlpi\Analyser\GlobalTypeResolver
         tags:
             - phpstan.broker.expressionTypeResolverExtension
