@@ -34,9 +34,8 @@ class GlobalTypeResolverForGlpi11Test extends TypeInferenceTestCase
     public static function getAdditionalConfigFiles(): array
     {
         return [
-            __DIR__ . '/../../extension.neon',
+            __DIR__ . '/../data/GlobalTypeResolver/extension.neon',
             __DIR__ . '/../data/glpi-11.0.x.neon',
-            __DIR__ . '/../data/GlobalTypeResolver/glpi-path.neon',
         ];
     }
 }
