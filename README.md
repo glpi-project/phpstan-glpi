@@ -125,3 +125,9 @@ To get around this limitation, we recommend that you declare each global variabl
 /** @var \Migration $migration */
 global migration;
 ```
+
+### `ForbidDangerousSystemFunctionRule`
+
+> Since GLPI 11.0.
+
+To avoid security issues, it is recommended to not use dangerous system functions that could, for example, lead to arbitrary code execution.
