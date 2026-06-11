@@ -39,7 +39,7 @@ services:
 
 rules:
     # declared in `services` - PHPStanGlpi\Rules\ForbidDynamicInstantiationRule
+    # declared in `services` - PHPStanGlpi\Rules\ForbidHardCodedRightNameRule
     - PHPStanGlpi\Rules\ForbidExitRule
     - PHPStanGlpi\Rules\ForbidHttpResponseCodeRule
     - PHPStanGlpi\Rules\MissingGlobalVarTypeRule
-    - PHPStanGlpi\Rules\ForbidHardCodedRightNameRule
