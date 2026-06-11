@@ -14,6 +14,7 @@ use PhpParser\Node\Scalar\String_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\Type\Constant\ConstantStringType;
 use PHPStanGlpi\Services\GlpiVersionResolver;
 
 /**
@@ -71,7 +72,7 @@ final class ForbidHardCodedRightNameRule implements Rule
 
         $method = $node->name->toString();
 
-        $error_message = $this->buildErrorMessage($first_arg->value, $method);
+        $error_message = $this->buildErrorMessage($first_arg->value, $method, $scope);
         if ($error_message === null) {
             return [];
         }
@@ -83,7 +84,7 @@ final class ForbidHardCodedRightNameRule implements Rule
         ];
     }
 
-    private function buildErrorMessage(Node\Expr $expr, string $method): ?string
+    private function buildErrorMessage(Node\Expr $expr, string $method, Scope $scope): ?string
     {
         if ($expr instanceof String_) {
             return \sprintf(
@@ -119,6 +120,16 @@ final class ForbidHardCodedRightNameRule implements Rule
                 $prop_name,
                 $method,
                 $class_name,
+            );
+        }
+
+        $type = $scope->getType($expr);
+        if ($type instanceof ConstantStringType) {
+            return \sprintf(
+                'Hardcoded string \'%s\' used as right name in Session::%s(). Use a class static property reference such as %s::$rightname instead.',
+                $type->getValue(),
+                $method,
+                \ucfirst($type->getValue()),
             );
         }
 
