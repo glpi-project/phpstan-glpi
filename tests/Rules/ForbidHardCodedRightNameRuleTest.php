@@ -47,7 +47,30 @@ class ForbidHardCodedRightNameRuleTest extends RuleTestCase
                 'Hardcoded string \'reservation\' used as right name in Session::haveRightsAnd(). Use a class static property reference such as Reservation::$rightname instead.',
                 10,
             ],
-            //
+            // wrong constant / wrong static property
+            [
+                'Class constant \'Ticket::MATRIX_FIELD\' used as right name in Session::checkRight(). Use Ticket::$rightname instead.',
+                13,
+            ],
+            [
+                'Static property \'Glpi\Api::$api_url\' used as right name in Session::checkRight(). Use Glpi\Api::$rightname instead.',
+                14,
+            ],
+            // fully qualified Session class
+            [
+                'Hardcoded string \'ticket\' used as right name in Session::checkRight(). Use a class static property reference such as Ticket::$rightname instead.',
+                17,
+            ],
+            // named argument for 'module'
+            [
+                'Hardcoded string \'config\' used as right name in Session::checkRight(). Use a class static property reference such as Config::$rightname instead.',
+                20,
+            ],
+            // named argument for 'module', reversed order
+            [
+                'Hardcoded string \'config\' used as right name in Session::checkRight(). Use a class static property reference such as Config::$rightname instead.',
+                21,
+            ],
         ]);
     }
 

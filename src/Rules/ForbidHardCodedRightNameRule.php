@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace PHPStanGlpi\Rules;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
@@ -62,13 +64,6 @@ final class ForbidHardCodedRightNameRule implements Rule
             return [];
         }
 
-        // Only report if the argument value is a hardcoded string literal
-        if (!($first_arg->value instanceof String_)) {
-            return [];
-        }
-
-        $string_value = $first_arg->value->value;
-
         // `isSessionRightCheckMethod` already ensures $node->name is an Identifier, but PHPStan cannot infer it
         if (!($node->name instanceof Identifier)) {
             return [];
@@ -76,18 +71,58 @@ final class ForbidHardCodedRightNameRule implements Rule
 
         $method = $node->name->toString();
 
+        $error_message = $this->buildErrorMessage($first_arg->value, $method);
+        if ($error_message === null) {
+            return [];
+        }
+
         return [
-            RuleErrorBuilder::message(
-                \sprintf(
-                    'Hardcoded string \'%s\' used as right name in Session::%s(). Use a class static property reference such as %s::$rightname instead.',
-                    $string_value,
-                    $method,
-                    ucfirst($string_value), // guessed class to use
-                )
-            )
+            RuleErrorBuilder::message($error_message)
                 ->identifier('glpi.forbidHardCodedRightName')
                 ->build(),
         ];
+    }
+
+    private function buildErrorMessage(Node\Expr $expr, string $method): ?string
+    {
+        if ($expr instanceof String_) {
+            return \sprintf(
+                'Hardcoded string \'%s\' used as right name in Session::%s(). Use a class static property reference such as %s::$rightname instead.',
+                $expr->value,
+                $method,
+                \ucfirst($expr->value),
+            );
+        }
+
+        if ($expr instanceof ClassConstFetch && $expr->class instanceof Name && $expr->name instanceof Identifier) {
+            $class_name = $expr->class->toString();
+            $const_name = $expr->name->toString();
+            return \sprintf(
+                'Class constant \'%s::%s\' used as right name in Session::%s(). Use %s::$rightname instead.',
+                $class_name,
+                $const_name,
+                $method,
+                $class_name,
+            );
+        }
+
+        if ($expr instanceof StaticPropertyFetch && $expr->class instanceof Name && $expr->name instanceof Identifier) {
+            // Correct usage: SomeClass::$rightname — not an error
+            if ($expr->name->name === 'rightname') {
+                return null;
+            }
+            $class_name = $expr->class->toString();
+            $prop_name = $expr->name->name;
+            return \sprintf(
+                'Static property \'%s::$%s\' used as right name in Session::%s(). Use %s::$rightname instead.',
+                $class_name,
+                $prop_name,
+                $method,
+                $class_name,
+            );
+        }
+
+        return null;
     }
 
     private function isSessionRightCheckMethod(StaticCall $node): bool
