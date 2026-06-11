@@ -21,11 +21,10 @@
     Session::checkRight(module: 'config', right: READ);
 
 
-// --- won't be caught but should ---
+// --- will be caught - variable holding a constant string ---
 
-    // phpstan cannot analyse this, it seems, but should be caught - @todo check if possible
     $variable = 'logs';
-    Session::checkRight($variable, UPDATE);
+    Session::checkRight($variable, UPDATE); // reported: PHPStan infers ConstantStringType
 
 // --- won't be caught - correct usage ---
 
