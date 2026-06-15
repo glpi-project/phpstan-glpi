@@ -74,7 +74,7 @@ class ForbidHardCodedRightNameRuleTest extends RuleTestCase
             // variable holding a constant string (inferred via PHPStan type analysis)
             [
                 'Hardcoded string \'logs\' used as right name in Session::checkRight(). Use a class static property reference such as Logs::$rightname instead.',
-                27,
+                25,
             ],
         ]);
     }
