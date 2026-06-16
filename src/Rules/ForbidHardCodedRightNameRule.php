@@ -51,7 +51,7 @@ final class ForbidHardCodedRightNameRule implements Rule
     public function processNode(Node $node, Scope $scope): array
     {
         // bypass rule if glpi version lower than 12
-        if (\version_compare($this->glpiVersionResolver->getGlpiVersion(), '12.0.0-dev', '<=')) {
+        if (\version_compare($this->glpiVersionResolver->getGlpiVersion(), '12.0.0-dev', '<')) {
             return [];
         }
 
