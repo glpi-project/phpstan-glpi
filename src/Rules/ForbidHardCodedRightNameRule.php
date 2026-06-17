@@ -98,10 +98,11 @@ final class ForbidHardCodedRightNameRule implements Rule
             $class_name = $expr->class->toString();
             $const_name = $expr->name->toString();
             return \sprintf(
-               'Class constant \'%1$s::%2$s\' used as right name in Session::%3$s(). Use %1$s::$rightname instead.',
+                'Class constant \'%1$s::%2$s\' used as right name in Session::%3$s(). Use %1$s::$rightname instead.',
                 $class_name,
                 $const_name,
                 $method,
+            );
         }
 
         if ($expr instanceof StaticPropertyFetch && $expr->class instanceof Name && $expr->name instanceof Identifier) {
@@ -112,7 +113,7 @@ final class ForbidHardCodedRightNameRule implements Rule
             $class_name = $expr->class->toString();
             $prop_name = $expr->name->name;
             return \sprintf(
-                'Static property \'%1$s::%2$s\' used as right name in Session::%3$s(). Use %1$s::$rightname instead.',
+                'Static property \'%1$s::$%2$s\' used as right name in Session::%3$s(). Use %1$s::$rightname instead.',
                 $class_name,
                 $prop_name,
                 $method,
