@@ -85,6 +85,7 @@ final class ForbidHardCodedRightNameRule implements Rule
 
     private function buildErrorMessage(Node\Expr $expr, string $method, Scope $scope): ?string
     {
+        // Caught: literal string passed directly, e.g. Session::checkRight('computer', READ)
         if ($expr instanceof String_) {
             return \sprintf(
                 'Hardcoded string \'%1$s\' used as right name in Session::%2$s(). Use a class static property reference such as %3$s::$rightname instead.',
@@ -94,6 +95,7 @@ final class ForbidHardCodedRightNameRule implements Rule
             );
         }
 
+        // Caught: class constant used as right name, e.g. Session::checkRight(Computer::RIGHTNAME, READ)
         if ($expr instanceof ClassConstFetch && $expr->class instanceof Name && $expr->name instanceof Identifier) {
             $class_name = $expr->class->toString();
             $const_name = $expr->name->toString();
@@ -105,8 +107,9 @@ final class ForbidHardCodedRightNameRule implements Rule
             );
         }
 
+        // Caught: a static property other than $rightname, e.g. Session::checkRight(Computer::$otherProp, READ)
         if ($expr instanceof StaticPropertyFetch && $expr->class instanceof Name && $expr->name instanceof Identifier) {
-            // Correct usage: SomeClass::$rightname — not an error
+            // Correct usage: SomeClass::$rightname — not an error, e.g. Session::checkRight(Computer::$rightname, READ)
             if ($expr->name->name === 'rightname') {
                 return null;
             }
@@ -120,6 +123,8 @@ final class ForbidHardCodedRightNameRule implements Rule
             );
         }
 
+        // Caught: any expression PHPStan resolves to a constant string, e.g.
+        // $right = 'computer'; Session::checkRight($right, READ) or a string concatenation/constant
         $type = $scope->getType($expr);
         $constantStrings = $type->getConstantStrings();
         if (!empty($constantStrings)) {
