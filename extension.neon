@@ -32,14 +32,10 @@ services:
             treatPhpDocTypesAsCertain: %treatPhpDocTypesAsCertain%
         tags:
             - phpstan.rules.rule
-    -
-        class: PHPStanGlpi\Rules\ForbidHardCodedRightNameRule
-        tags:
-            - phpstan.rules.rule
 
 rules:
     # declared in `services` - PHPStanGlpi\Rules\ForbidDynamicInstantiationRule
-    # declared in `services` - PHPStanGlpi\Rules\ForbidHardCodedRightNameRule
     - PHPStanGlpi\Rules\ForbidExitRule
+    - PHPStanGlpi\Rules\ForbidHardCodedRightNameRule
     - PHPStanGlpi\Rules\ForbidHttpResponseCodeRule
     - PHPStanGlpi\Rules\MissingGlobalVarTypeRule
