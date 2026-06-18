@@ -124,7 +124,7 @@ final class ForbidHardCodedRightNameRule implements Rule
         }
 
         // Caught: any expression PHPStan resolves to a constant string, e.g.
-        // $right = 'computer'; Session::checkRight($right, READ) or a string concatenation/constant
+        // $right = 'computer'; Session::checkRight($right, READ)
         $type = $scope->getType($expr);
         $constantStrings = $type->getConstantStrings();
         if (!empty($constantStrings)) {
