@@ -50,17 +50,17 @@ class ForbidHardCodedRightNameRuleTest extends RuleTestCase
             // fully qualified Session class
             [
                 'Hardcoded string \'ticket\' used as right name in Session::checkRight(). Use a class static property reference such as Ticket::$rightname instead.',
-                17,
+                13,
             ],
             // named argument for 'module'
             [
                 'Hardcoded string \'config\' used as right name in Session::checkRight(). Use a class static property reference such as Config::$rightname instead.',
-                20,
+                16,
             ],
             // named argument for 'module', reversed order
             [
                 'Hardcoded string \'config\' used as right name in Session::checkRight(). Use a class static property reference such as Config::$rightname instead.',
-                21,
+                17,
             ],
         ]);
     }
