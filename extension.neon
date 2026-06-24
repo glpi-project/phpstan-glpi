@@ -39,3 +39,4 @@ rules:
     - PHPStanGlpi\Rules\ForbidHardCodedRightNameRule
     - PHPStanGlpi\Rules\ForbidHttpResponseCodeRule
     - PHPStanGlpi\Rules\MissingGlobalVarTypeRule
+    - PHPStanGlpi\Rules\ForbidEmptyExceptionMessageRule
