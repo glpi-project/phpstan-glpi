@@ -6,7 +6,7 @@
         "MIT"
     ],
     "require": {
-        "php": ">=7.4",
+        "php": ">=8.2",
         "phpstan/phpstan": "^2.1",
         "symfony/polyfill-php80": "^1.37"
     },
@@ -19,7 +19,7 @@
     "config": {
         "optimize-autoloader": true,
         "platform": {
-            "php": "7.4.99"
+            "php": "8.2.99"
         },
         "sort-packages": true
     },
