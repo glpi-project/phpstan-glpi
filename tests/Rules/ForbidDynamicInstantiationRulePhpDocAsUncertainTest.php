@@ -88,9 +88,6 @@ class ForbidDynamicInstantiationRulePhpDocAsUncertainTest extends RuleTestCase
         ]);
     }
 
-    /**
-     * @requires PHP >= 8.0
-     */
     public function testUnionType(): void
     {
         $this->analyse([__DIR__ . '/../data/ForbidDynamicInstantiationRule/union-type.php'], [

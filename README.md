@@ -33,16 +33,9 @@ parameters:
         - ../../inc
         - ../../src
 
-    # for GLPI 11.x the following configuration entries must be used
     bootstrapFiles:
         - ../../stubs/glpi_constants.php
         - ../../vendor/autoload.php
-
-    # for GLPI 10.x the following configuration entries must be used
-    bootstrapFiles:
-        - ../../inc/based_config.php
-    stubFiles:
-        - ../../stubs/glpi_constants.php
 ```
 
 The GLPI path and version should be detected automatically, but you can specify them in the `parameters` section of your PHPStan configuration:
