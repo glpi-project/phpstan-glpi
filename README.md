@@ -117,9 +117,8 @@ Therefore, its usage is discouraged.
 
 > Since GLPI 12.0.
 
-In GLPI 12.0, right names are no longer plain strings but are defined as a static property `$rightname` on each item class.
-Passing a hardcoded string as the first argument (`module`) of `Session::checkRight()`, `Session::checkRightsOr()`,
-`Session::haveRight()`, `Session::haveRightsAnd()`, or `Session::haveRightsOr()` is therefore an error.
+In the past, there have been issues where rights management was not handled correctly at the controller level due to the use of an obsolete hardcoded string. To avoid this type of problem, starting with GLPI 12, the use of a hardcoded string, as the first argument (`module`) of `Session::checkRight()`, `Session::checkRightsOr()`,
+`Session::haveRight()`, `Session::haveRightsAnd()`, or `Session::haveRightsOr()`, will be considered an error and must be replaced with the `$rightname` property of the appropriate class.
 
 ```php
 Session::checkRight('computer', READ); // wrong
