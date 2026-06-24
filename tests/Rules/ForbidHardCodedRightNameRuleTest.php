@@ -26,7 +26,7 @@ class ForbidHardCodedRightNameRuleTest extends RuleTestCase
     public function testSessionMethods(): void
     {
         $this->analyse([__DIR__ . '/../data/ForbidHardCodedRightNameRule/sessionMethods.php'], [
-            // harcoded strings
+            // hardcoded strings
             [
                 'Hardcoded string \'hardcoded\' used as right name in Session::checkRight(). Use a class static property reference such as Hardcoded::$rightname instead.',
                 6,
@@ -47,15 +47,6 @@ class ForbidHardCodedRightNameRuleTest extends RuleTestCase
                 'Hardcoded string \'reservation\' used as right name in Session::haveRightsAnd(). Use a class static property reference such as Reservation::$rightname instead.',
                 10,
             ],
-            // wrong constant / wrong static property
-            [
-                'Class constant \'Ticket::MATRIX_FIELD\' used as right name in Session::checkRight(). Use Ticket::$rightname instead.',
-                13,
-            ],
-            [
-                'Static property \'Glpi\Api::$api_url\' used as right name in Session::checkRight(). Use Glpi\Api::$rightname instead.',
-                14,
-            ],
             // fully qualified Session class
             [
                 'Hardcoded string \'ticket\' used as right name in Session::checkRight(). Use a class static property reference such as Ticket::$rightname instead.',
@@ -70,11 +61,6 @@ class ForbidHardCodedRightNameRuleTest extends RuleTestCase
             [
                 'Hardcoded string \'config\' used as right name in Session::checkRight(). Use a class static property reference such as Config::$rightname instead.',
                 21,
-            ],
-            // variable holding a constant string (inferred via PHPStan type analysis)
-            [
-                'Hardcoded string \'logs\' used as right name in Session::checkRight(). Use a class static property reference such as Logs::$rightname instead.',
-                25,
             ],
         ]);
     }

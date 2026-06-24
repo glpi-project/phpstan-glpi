@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace PHPStanGlpi\Rules;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
@@ -71,73 +69,22 @@ final class ForbidHardCodedRightNameRule implements Rule
 
         $method = $node->name->toString();
 
-        $error_message = $this->buildErrorMessage($first_arg->value, $method, $scope);
-        if ($error_message === null) {
+        if (!($first_arg->value instanceof String_)) {
             return [];
         }
 
+        $string = $first_arg->value;
+
         return [
-            RuleErrorBuilder::message($error_message)
+            RuleErrorBuilder::message(\sprintf(
+                'Hardcoded string \'%1$s\' used as right name in Session::%2$s(). Use a class static property reference such as %3$s::$rightname instead.',
+                $string->value,
+                $method,
+                \ucfirst($string->value),
+            ))
                 ->identifier('glpi.forbidHardCodedRightName')
                 ->build(),
         ];
-    }
-
-    private function buildErrorMessage(Node\Expr $expr, string $method, Scope $scope): ?string
-    {
-        // Caught: literal string passed directly, e.g. Session::checkRight('computer', READ)
-        if ($expr instanceof String_) {
-            return \sprintf(
-                'Hardcoded string \'%1$s\' used as right name in Session::%2$s(). Use a class static property reference such as %3$s::$rightname instead.',
-                $expr->value,
-                $method,
-                \ucfirst($expr->value),
-            );
-        }
-
-        // Caught: class constant used as right name, e.g. Session::checkRight(Computer::RIGHTNAME, READ)
-        if ($expr instanceof ClassConstFetch && $expr->class instanceof Name && $expr->name instanceof Identifier) {
-            $class_name = $expr->class->toString();
-            $const_name = $expr->name->toString();
-            return \sprintf(
-                'Class constant \'%1$s::%2$s\' used as right name in Session::%3$s(). Use %1$s::$rightname instead.',
-                $class_name,
-                $const_name,
-                $method,
-            );
-        }
-
-        // Caught: a static property other than $rightname, e.g. Session::checkRight(Computer::$otherProp, READ)
-        if ($expr instanceof StaticPropertyFetch && $expr->class instanceof Name && $expr->name instanceof Identifier) {
-            // Correct usage: SomeClass::$rightname — not an error, e.g. Session::checkRight(Computer::$rightname, READ)
-            if ($expr->name->name === 'rightname') {
-                return null;
-            }
-            $class_name = $expr->class->toString();
-            $prop_name = $expr->name->name;
-            return \sprintf(
-                'Static property \'%1$s::$%2$s\' used as right name in Session::%3$s(). Use %1$s::$rightname instead.',
-                $class_name,
-                $prop_name,
-                $method,
-            );
-        }
-
-        // Caught: any expression PHPStan resolves to a constant string, e.g.
-        // $right = 'computer'; Session::checkRight($right, READ)
-        $type = $scope->getType($expr);
-        $constantStrings = $type->getConstantStrings();
-        if (!empty($constantStrings)) {
-            $constantStringType = reset($constantStrings);
-            return \sprintf(
-                'Hardcoded string \'%s\' used as right name in Session::%s(). Use a class static property reference such as %s::$rightname instead.',
-                $constantStringType->getValue(),
-                $method,
-                \ucfirst($constantStringType->getValue()),
-            );
-        }
-
-        return null;
     }
 
     private function isSessionRightCheckMethod(StaticCall $node): bool

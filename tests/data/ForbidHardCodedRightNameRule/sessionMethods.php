@@ -9,20 +9,12 @@
     Session::haveRightsOr('ticketvalidation', TicketValidation::getValidateRights());
     Session::haveRightsAnd('reservation', [CREATE, UPDATE, DELETE, PURGE]);
 
-    // wrong constant / static property
-    Session::checkRight(Ticket::MATRIX_FIELD, READ); // constant
-    Session::checkRight(\Glpi\Api::$api_url, READ); // static variable but wrong one
-
     // fully qualified Session class is equivalent
     \Session::checkRight('ticket', READ);
 
     // named argument for 'module'
     Session::checkRight(right: READ, module: 'config');
     Session::checkRight(module: 'config', right: READ);
-
-    // intermediate variable used
-    $variable = 'logs';
-    Session::checkRight($variable, UPDATE);
 
 // --- won't be caught
 
@@ -34,7 +26,15 @@
     Session::haveRightsOr(Ticket::$rightname, TicketValidation::getValidateRights());
     Session::haveRightsAnd(Ticket::$rightname, [CREATE, UPDATE, DELETE, PURGE]);
 
-    // not applicable ---
+    // not applicable
+
+    // wrong constant / static property — not caught, rule only checks literal strings
+    Session::checkRight(Ticket::MATRIX_FIELD, READ);
+    Session::checkRight(\Glpi\Api::$api_url, READ);
+
+    // intermediate variable — not caught, rule does not resolve variable types
+    $variable = 'logs';
+    Session::checkRight($variable, UPDATE);
 
     Foo::checkRight('not_session', READ); // not the Session class
     Session::login('not_right_method', READ); // not in CHECKED_METHODS
