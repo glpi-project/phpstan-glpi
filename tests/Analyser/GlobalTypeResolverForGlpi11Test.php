@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PHPStanGlpi\Tests\Analyser;
 
 use PHPStan\Testing\TypeInferenceTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class GlobalTypeResolverForGlpi11Test extends TypeInferenceTestCase
 {
@@ -21,8 +22,8 @@ class GlobalTypeResolverForGlpi11Test extends TypeInferenceTestCase
 
     /**
      * @param mixed ...$args
-     * @dataProvider dataFileAsserts
      */
+    #[DataProvider('dataFileAsserts')]
     public function testFileAsserts(
         string $assertType,
         string $file,
