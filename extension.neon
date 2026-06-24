@@ -36,5 +36,6 @@ services:
 rules:
     # declared in `services` - PHPStanGlpi\Rules\ForbidDynamicInstantiationRule
     - PHPStanGlpi\Rules\ForbidExitRule
+    - PHPStanGlpi\Rules\ForbidHardCodedRightNameRule
     - PHPStanGlpi\Rules\ForbidHttpResponseCodeRule
     - PHPStanGlpi\Rules\MissingGlobalVarTypeRule
