@@ -1,13 +1,15 @@
 parametersSchema:
     glpi: structure([
         glpiPath: schema(string(), nullable()),
-        glpiVersion: schema(string(), nullable())
+        glpiVersion: schema(string(), nullable()),
+        enableEarlierRulesAdoption: bool()
     ])
 
 parameters:
     glpi:
         glpiPath: null
         glpiVersion: null
+        enableEarlierRulesAdoption: false
 
 services:
     -
@@ -27,7 +29,17 @@ services:
         arguments:
             version: %glpi.glpiVersion%
     -
+        class: PHPStanGlpi\Services\EarlierRulesAdoptionResolver
+        arguments:
+            enabled: %glpi.enableEarlierRulesAdoption%
+    -
         class: PHPStanGlpi\Rules\ForbidDynamicInstantiationRule
+        arguments:
+            treatPhpDocTypesAsCertain: %treatPhpDocTypesAsCertain%
+        tags:
+            - phpstan.rules.rule
+    -
+        class: PHPStanGlpi\Rules\ForbidNonLiteralSqlExpressionRule
         arguments:
             treatPhpDocTypesAsCertain: %treatPhpDocTypesAsCertain%
         tags:
@@ -35,6 +47,7 @@ services:
 
 rules:
     # declared in `services` - PHPStanGlpi\Rules\ForbidDynamicInstantiationRule
+    # declared in `services` - PHPStanGlpi\Rules\ForbidNonLiteralSqlExpressionRule
     - PHPStanGlpi\Rules\ForbidExitRule
     - PHPStanGlpi\Rules\ForbidHardCodedRightNameRule
     - PHPStanGlpi\Rules\ForbidHttpResponseCodeRule

@@ -1,0 +1,3 @@
+parameters:
+    scanFiles:
+        - %rootDir%/../../../tests/data/stubs/query-elements.php

@@ -46,6 +46,18 @@ parameters:
         glpiVersion: "11.0.0"
 ```
 
+Some rules are not enforced yet by the detected GLPI version, but their recommended alternatives are already available.
+They can be adopted in advance, to ease the migration to the next GLPI major version, using the
+`enableEarlierRulesAdoption` parameter:
+```neon
+parameters:
+    glpi:
+        enableEarlierRulesAdoption: true
+```
+
+Be aware that a rule that is a candidate for earlier adoption is not stabilized yet: as long as the target GLPI version
+that enables it by default is not published, it may still be changed, or even removed.
+
 See https://phpstan.org/config-reference fore more information about the PHPStan configuration options.
 
 ## Analyser improvements
@@ -118,6 +130,44 @@ Session::checkRight('computer', READ); // wrong
 
 Session::checkRight(Computer::$rightname, READ); // correct
 ```
+
+### `ForbidNonLiteralSqlExpressionRule`
+
+> Enforced since GLPI 13.0. Can be adopted since GLPI 12.0, using the `enableEarlierRulesAdoption` parameter.
+
+`QueryExpression` usage is legitimate for a hardcoded fragment, but as soon as the fragment is
+assembled at runtime, the safety of the whole statement depends on the caller, and nothing can verify it.
+Therefore, its first argument (`expression`) must be a literal SQL string, or another query element.
+
+```php
+new QueryExpression(new QueryIdentifier('glpi_tickets.id')); // correct
+new QueryExpression('COUNT(`glpi_tickets`.`id`)'); // correct
+
+new QueryExpression(sprintf('COUNT(`%s`.`id`)', $table)); // wrong
+```
+
+Identifiers belong in `QueryIdentifier`, values in `QueryValue`, and SQL fragments in `QueryFunction` / `QuerySubQuery`.
+Dynamic values can also be passed through the `values` argument, to be bound as statement parameters.
+
+```php
+new QueryExpression('DATE_ADD(`date`, INTERVAL ? DAY)', values: [$delay]); // correct
+```
+
+A call whose arguments are unpacked from an array (`new QueryExpression(...$args)`) is reported too,
+since the `expression` argument cannot be located: an explicit ignore is preferred over an unreported
+potential issue. Passing the `expression` argument explicitly is enough to silence it.
+
+A literal that is nothing but an identifier reference is also reported, under the
+`glpi.forbidSqlExpressionIdentifier` error identifier, as it must be built with a `QueryIdentifier`.
+
+```php
+new QueryIdentifier('glpi_tickets.id'); // correct
+
+new QueryExpression('`glpi_tickets`.`id`'); // wrong
+```
+
+If the `treatPhpDocTypesAsCertain` PHPStan parameter is not set to `false`, a variable having a `QueryExpression` type
+declared in its PHPDoc will be considered safe.
 
 ### `MissingGlobalVarTypeRule`
 
