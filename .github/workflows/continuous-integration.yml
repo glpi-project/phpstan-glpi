@@ -64,7 +64,7 @@ jobs:
       - name: "PHP CS Fixer"
         if: ${{ !cancelled() }}
         run: |
-          PHP_CS_FIXER_IGNORE_ENV=1 vendor/bin/php-cs-fixer fix --dry-run --format=checkstyle | cs2pr
+          vendor/bin/php-cs-fixer fix --dry-run --format=checkstyle | cs2pr
       - name: "PHPStan"
         if: ${{ !cancelled() }}
         run: |
