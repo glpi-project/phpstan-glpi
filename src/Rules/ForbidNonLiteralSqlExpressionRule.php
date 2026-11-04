@@ -230,7 +230,7 @@ final class ForbidNonLiteralSqlExpressionRule implements Rule
     }
 
     /**
-     * @param array<Arg|Node\VariadicPlaceholder> $args
+     * @param array<Arg|Node\ArgPlaceholder|Node\VariadicPlaceholder> $args
      */
     private function getArgument(array $args, string $name): ?Arg
     {
@@ -259,7 +259,7 @@ final class ForbidNonLiteralSqlExpressionRule implements Rule
     }
 
     /**
-     * @param array<Arg|Node\VariadicPlaceholder> $args
+     * @param array<Arg|Node\ArgPlaceholder|Node\VariadicPlaceholder> $args
      */
     private function hasUnpackedArguments(array $args): bool
     {

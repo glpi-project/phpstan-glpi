@@ -113,7 +113,7 @@ final class ForbidHardCodedRightNameRule implements Rule
     }
 
     /**
-     * @param array<Node\Arg|\PhpParser\Node\VariadicPlaceholder> $args
+     * @param array<Node\Arg|\PhpParser\Node\ArgPlaceholder|\PhpParser\Node\VariadicPlaceholder> $args
      * @return Node\Arg|null
      */
     private function getFirstArgument(array $args): ?Node\Arg
