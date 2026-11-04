@@ -16,6 +16,7 @@
         "phpunit/phpunit": "^11.5"
     },
     "config": {
+        "lock": false,
         "optimize-autoloader": true,
         "platform": {
             "php": "8.2.99"
